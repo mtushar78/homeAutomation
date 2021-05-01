@@ -5,12 +5,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+import java.util.List;
 
 @Entity
 public class Devices {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     int id;
     @EmbeddedId
+//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     DeviceComposite deviceComposite;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     int status;
@@ -19,6 +21,14 @@ public class Devices {
     @Transient
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String email;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    List<Relay> relays;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    List<String> sharedTo;
 
     public Devices() {
     }
@@ -69,13 +79,32 @@ public class Devices {
         this.email = email;
     }
 
+    public List<Relay> getRelays() {
+        return relays;
+    }
+
+    public void setRelays(List<Relay> relays) {
+        this.relays = relays;
+    }
+
+    public List<String> getSharedTo() {
+        return sharedTo;
+    }
+
+    public void setSharedTo(List<String> sharedTo) {
+        this.sharedTo = sharedTo;
+    }
+
     @Override
     public String toString() {
         return "Devices{" +
-                "deviceComposite=" + deviceComposite +
+                "id=" + id +
+                ", deviceComposite=" + deviceComposite +
                 ", status=" + status +
                 ", parent=" + parent +
                 ", email='" + email + '\'' +
+                ", relays=" + relays +
+                ", sharedTo='" + sharedTo + '\'' +
                 '}';
     }
 }

@@ -12,4 +12,9 @@ public interface UserRepo extends JpaRepository<User,Integer> {
     int findBySso_id(String sso_id);
     @Query(value= "select id from user where email = :email", nativeQuery = true)
     Integer getUserId(String email);
+
+    @Query(value = "select case when count(id)>0 then true else false end from user where email = :email", nativeQuery = true)
+    int existsByEmail(String email);
+
+
 }

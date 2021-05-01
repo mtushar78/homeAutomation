@@ -1,6 +1,9 @@
 package com.example.homeautomation.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class User {
@@ -12,6 +15,9 @@ public class User {
     String disp_name;
     @Column(name = "sso_id",unique = true)
     String sso_id;
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    List<Devices> devices;
 
     public User() {
     }
@@ -53,6 +59,14 @@ public class User {
 
     public void setSso_id(String sso_id) {
         this.sso_id = sso_id;
+    }
+
+    public List<Devices> getDevices() {
+        return devices;
+    }
+
+    public void setDevices(List<Devices> devices) {
+        this.devices = devices;
     }
 }
 

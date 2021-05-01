@@ -2,6 +2,7 @@ package com.example.homeautomation.services;
 import com.example.homeautomation.models.Devices;
 import com.example.homeautomation.models.Relay;
 import com.example.homeautomation.models.RelayComposite;
+import com.example.homeautomation.models.User;
 import com.example.homeautomation.pojo.DevicePOJO;
 import com.example.homeautomation.pojo.JsonResponse;
 import com.example.homeautomation.repositories.DeviceRepo;
@@ -12,7 +13,10 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DeviceRelayService {
@@ -45,14 +49,11 @@ public class DeviceRelayService {
         return obj;
     }
 
-    public ResponseEntity<String> saveDevice_relay(Devices device){
+    public ResponseEntity<JsonResponse> saveDevice_relay(Devices device){
 
         ResponseEntity<JsonResponse> res = pythonApiCall(device.getDeviceComposite().getMac_address());
-        ResponseEntity<String> return_val = null;
-        System.out.println(res.getBody().getStatus());
-        System.out.println(res.getBody().getMessage());
-        System.out.println(res.getStatusCode());
-        System.out.println(res.getStatusCodeValue());
+        ResponseEntity<JsonResponse> return_val = null;
+        JsonResponse responseBody = new JsonResponse();
 
         if(res.getBody().getStatus().trim().equals("Success")){
             System.out.println("Entered to the If block [got Success] ");
@@ -64,16 +65,20 @@ public class DeviceRelayService {
                 device.setId(deviceRepo.maxId());
                 deviceRepo.save(device);
                 this.addRelay(device.getDeviceComposite().getMac_address());
-
-                return_val = new ResponseEntity<String>("Successfully Inserted", new HttpHeaders(), HttpStatus.OK);
+                responseBody.setStatus(String.valueOf(HttpStatus.OK));
+                responseBody.setMessage("Successfully Inserted");
+                return_val = new ResponseEntity<JsonResponse>(responseBody, new HttpHeaders(), HttpStatus.OK);
             }else {
-                return_val = new ResponseEntity<String>("Device is already registered with the same user.", new HttpHeaders(), HttpStatus.FOUND);
+                responseBody.setStatus(String.valueOf(HttpStatus.FOUND));
+                responseBody.setMessage("Device is already registered with the same user.");
+                return_val = new ResponseEntity<JsonResponse>(responseBody, new HttpHeaders(), HttpStatus.FOUND);
             }
             return return_val;
         }
         else {
-            System.out.println("Entered to the else block [Did not get Success] ");
-            return_val = new ResponseEntity<String>(res.getBody().getMessage(), new HttpHeaders(), HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+            responseBody.setStatus(String.valueOf(HttpStatus.NON_AUTHORITATIVE_INFORMATION));
+            responseBody.setMessage(res.getBody().getMessage());
+            return_val = new ResponseEntity<JsonResponse>(responseBody, new HttpHeaders(), HttpStatus.NON_AUTHORITATIVE_INFORMATION);
             return return_val;
         }
 
@@ -91,6 +96,37 @@ public class DeviceRelayService {
             relayRepo.save(relay);
         }
         return "success";
+    }
+
+    public User getUserInfo(String email){
+        int userId = userRepo.getUserId(email);
+        Optional<User> user = userRepo.findById(userId);
+        if(user.isPresent()){
+            List<Devices> devices = deviceRepo.getDevices_forParent(userId);
+            List<Object[]> queryRecords = deviceRepo.sharedDevices(userId);
+
+
+            user.get().setDevices(devices);
+            for (int i=0; i<devices.size();i++) {
+//                    System.out.println(devices1.toString());
+                List<String> sharedTo = new ArrayList<>();
+                String mac_address= devices.get(i).getDeviceComposite().getMac_address();
+                devices.get(i).setRelays(relayRepo.getDevices_relays(mac_address));
+                for(Object[] objects : queryRecords){
+                    String mac = (String) objects[0];
+                    String email_add = (String) objects[1];
+                    System.out.println("dev mac: "+ devices.get(i).getDeviceComposite().getMac_address()+ "shared: "+mac);
+//                    System.out.println(email_add);
+                    if(devices.get(i).getDeviceComposite().getMac_address().equals(mac) ){
+                        sharedTo.add(email_add);
+                    }
+                }
+                devices.get(i).setSharedTo(sharedTo);
+            }
+            return user.get();
+
+        }
+        return user.get();
     }
 
 }

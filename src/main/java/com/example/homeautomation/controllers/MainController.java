@@ -13,10 +13,7 @@ import jdk.nashorn.internal.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.Arrays;
@@ -35,10 +32,18 @@ public class MainController {
 
 
 
+
     @GetMapping("/")
     public String hello(){
         return "Hello people!";
     }
+    @GetMapping("/getUserInfo/{email}")
+    public ResponseEntity<User> getUserInfo(@PathVariable String email){
+        User user = deviceRelayService.getUserInfo(email);
+        return new ResponseEntity<User>(user, new HttpHeaders(),HttpStatus.OK);
+    }
+
+
     @PostMapping("/userReg")
     public String addUsers(@RequestBody User user){
         int is_exists = userRepo.findBySso_id(user.getSso_id());
@@ -52,10 +57,15 @@ public class MainController {
     }
 
     @PostMapping("/saveDevice")
-    public ResponseEntity<String> saveDevices(@RequestBody Devices device){
-        String return_val;
-        ResponseEntity<String> return_entity = null;
-        return_entity = deviceRelayService.saveDevice_relay(device);
+    public ResponseEntity<JsonResponse> saveDevices(@RequestBody Devices device){
+        ResponseEntity<JsonResponse> return_entity = null;
+        if(userRepo.existsByEmail(device.getEmail()) == 1){
+            return_entity = deviceRelayService.saveDevice_relay(device);
+        }else {
+            JsonResponse returned_val = new JsonResponse("No user found with "+device.getEmail(), String.valueOf(HttpStatus.NON_AUTHORITATIVE_INFORMATION));
+            System.out.println(returned_val.toString());
+            return_entity = new ResponseEntity<>(returned_val,new HttpHeaders(), HttpStatus.NON_AUTHORITATIVE_INFORMATION);
+        }
 
         return return_entity;
     }

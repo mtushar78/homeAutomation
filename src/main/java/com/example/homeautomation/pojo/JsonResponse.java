@@ -3,40 +3,40 @@ package com.example.homeautomation.pojo;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class JsonResponse {
-    @JsonProperty
-    String Message;
-    @JsonProperty
-    String Status;
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    String message;
+    @JsonProperty(access = JsonProperty.Access.READ_WRITE)
+    String status;
 
     public JsonResponse() {
     }
 
     public JsonResponse(String Message, String status) {
-        this.Message = Message;
-        Status = status;
+        this.message = Message;
+        this.status = status;
     }
 
     public String getMessage() {
-        return Message;
+        return message;
     }
 
     public void setMessage(String message) {
-        this.Message = message;
+        this.message = message;
     }
 
     public String getStatus() {
-        return Status;
+        return status;
     }
 
     public void setStatus(String status) {
-        Status = status;
+        this.status = status;
     }
 
     @Override
     public String toString() {
         return "JsonResponse{" +
-                "message='" + Message + '\'' +
-                ", Status='" + Status + '\'' +
+                "message='" + message + '\'' +
+                ", Status='" + status + '\'' +
                 '}';
     }
 }
