@@ -8,6 +8,7 @@ import com.example.homeautomation.pojo.JsonResponse;
 import com.example.homeautomation.repositories.DeviceRepo;
 import com.example.homeautomation.repositories.RelayRepo;
 import com.example.homeautomation.repositories.UserRepo;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,7 @@ public class DeviceRelayService {
             relay.setRelayComposite(relayComposite);
             relayRepo.save(relay);
         }
+
         return "success";
     }
 
@@ -106,23 +108,27 @@ public class DeviceRelayService {
             List<Object[]> queryRecords = deviceRepo.sharedDevices(userId);
 
 
-            user.get().setDevices(devices);
+
             for (int i=0; i<devices.size();i++) {
+                devices.get(i).setDevice_mac(devices.get(i).getDeviceComposite().getMac_address());
 //                    System.out.println(devices1.toString());
                 List<String> sharedTo = new ArrayList<>();
                 String mac_address= devices.get(i).getDeviceComposite().getMac_address();
-                devices.get(i).setRelays(relayRepo.getDevices_relays(mac_address));
+                List<Relay> relayList = relayRepo.getDevices_relays(mac_address);
+                for(int j=0; j<relayList.size(); j++){
+                    relayList.get(j).setRelay_name(relayList.get(j).getRelayComposite().getRelay_name());
+                }
+                devices.get(i).setRelays(relayList);
                 for(Object[] objects : queryRecords){
                     String mac = (String) objects[0];
                     String email_add = (String) objects[1];
-                    System.out.println("dev mac: "+ devices.get(i).getDeviceComposite().getMac_address()+ "shared: "+mac);
-//                    System.out.println(email_add);
                     if(devices.get(i).getDeviceComposite().getMac_address().equals(mac) ){
                         sharedTo.add(email_add);
                     }
                 }
                 devices.get(i).setSharedTo(sharedTo);
             }
+            user.get().setDevices(devices);
             return user.get();
 
         }

@@ -12,8 +12,13 @@ public class Devices {
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     int id;
     @EmbeddedId
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     DeviceComposite deviceComposite;
+
+    @Transient
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    String device_mac;
+
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     int status;
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
@@ -29,6 +34,8 @@ public class Devices {
     @Transient
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     List<String> sharedTo;
+
+
 
     public Devices() {
     }
@@ -93,6 +100,14 @@ public class Devices {
 
     public void setSharedTo(List<String> sharedTo) {
         this.sharedTo = sharedTo;
+    }
+
+    public String getDevice_mac() {
+        return device_mac;
+    }
+
+    public void setDevice_mac(String device_mac) {
+        this.device_mac = device_mac;
     }
 
     @Override
