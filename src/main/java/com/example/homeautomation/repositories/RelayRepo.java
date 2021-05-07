@@ -1,5 +1,6 @@
 package com.example.homeautomation.repositories;
-import com.example.homeautomation.models.Devices;
+
+
 import com.example.homeautomation.models.Relay;
 import com.example.homeautomation.models.RelayComposite;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -17,6 +18,6 @@ public interface RelayRepo extends JpaRepository<Relay, RelayComposite> {
 
     @Modifying
     @Transactional
-    @Query(value = "update relay set status = :status where device_mac = :mac and relay_name  = :relay_name", nativeQuery = true)
-    void setRelayOnOff(String mac, String relay_name, int status);
+    @Query(value = "update relay set status = :status, mod_time = :mod_time where device_mac = :mac and relay_name  = :relay_name", nativeQuery = true)
+    void setRelayOnOff(String mac, String relay_name, int status, String mod_time);
 }

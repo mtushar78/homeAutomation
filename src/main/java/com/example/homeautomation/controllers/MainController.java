@@ -17,6 +17,8 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -92,7 +94,10 @@ public class MainController {
     @PostMapping("/relay-on-off")
     public void relayOnOff(@RequestBody RelayOnOffPojo relay){
        System.out.println(relay.toString());
-        relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus());
+        SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
+        Date date = new Date(System.currentTimeMillis());
+        System.out.println("time: "+formatter.format(date));
+        relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus(), formatter.format(date));
     }
     @PostMapping("/test")
     public void restTest(@RequestBody JSONObject object){
