@@ -92,12 +92,13 @@ public class MainController {
         return "success";
     }
     @PostMapping("/relay-on-off")
-    public void relayOnOff(@RequestBody RelayOnOffPojo relay){
+    public String relayOnOff(@RequestBody RelayOnOffPojo relay){
        System.out.println(relay.toString());
         SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
         System.out.println("time: "+formatter.format(date));
         relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus(), formatter.format(date));
+        return "success";
     }
     @PostMapping("/test")
     public void restTest(@RequestBody JSONObject object){
