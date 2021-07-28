@@ -31,11 +31,13 @@ jobs:
 #        name: Run Buildx
 #        run: |
 #          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
-      -
-        name: SSH Access to server
-        uses: appleboy/ssh-action@master
-        with:
-          host: 103.95.209.103
-          username: pi
-          key: ${{ secrets.SSH_KEY }}
-          port: 2208
+      - name: Install SSH key
+          uses: shimataro/ssh-key-action@v1
+          with:
+            private-key: ${{ secrets.SSH_KEY }}
+            known-hosts: ${{ secrets.HOST }}
+
+      - name: Deploy to swarm
+          run: |
+            ls
+
