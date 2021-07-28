@@ -8,8 +8,17 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - name: Install SSH key
+          uses: shimataro/ssh-key-action@v2
+          with:
+            key: ${{ secrets.SSH_KEY }}
+            name: id_rsa # optional
+            known_hosts: ${{ secrets.HOST }}
+
+      - name: list
+          run: ls
+      #      - name: Checkout
+      #        uses: actions/checkout@v2
 
       #      # https://github.com/docker/setup-qemu-action
       #      - name: Set up QEMU
@@ -30,12 +39,12 @@ jobs:
       #        name: Run Buildx
       #        run: |
       #          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
-      - name: Install SSH key
-          uses: shimataro/ssh-key-action@v2
-          with:
-            private-key: ${{ secrets.SSH_KEY }}
-            known-hosts: ${{ secrets.HOST }}
-      - name: list of files
-          run: |
-            ls
+#      - name: Install SSH key
+#          uses: shimataro/ssh-key-action@v2
+#          with:
+#            private-key: ${{ secrets.SSH_KEY }}
+#            known-hosts: ${{ secrets.HOST }}
+#      - name: list of files
+#          run: |
+#            ls
 
