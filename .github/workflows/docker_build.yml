@@ -35,7 +35,7 @@ jobs:
         uses: shimataro/ssh-key-action@v2
         with:
           key: ${{ secrets.SSH_KEY }}
-          known-hosts: ${{ secrets.HOST }}
+          known_hosts: ${{ secrets.HOST }}
 
       - name: list of files
         run: |
