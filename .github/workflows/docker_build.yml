@@ -16,7 +16,7 @@ jobs:
           known_hosts: ${{ secrets.HOST }}
 
       - name: list
-          run: ls
+        run: ls
       #      - name: Checkout
       #        uses: actions/checkout@v2
 
