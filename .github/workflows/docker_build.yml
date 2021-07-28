@@ -32,12 +32,12 @@ jobs:
       #        run: |
       #          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
       - name: Install SSH key
-          uses: shimataro/ssh-key-action@v2
-          with:
-            private-key: ${{ secrets.SSH_KEY }}
-            known-hosts: ${{ secrets.HOST }}
+        uses: shimataro/ssh-key-action@v2
+        with:
+          private-key: ${{ secrets.SSH_KEY }}
+          known-hosts: ${{ secrets.HOST }}
 
       - name: list of files
-          run: |
-            ls
+        run: |
+          ls
 
