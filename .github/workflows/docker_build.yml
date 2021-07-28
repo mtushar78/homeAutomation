@@ -39,5 +39,5 @@ jobs:
 
       - name: list of files
         run: |
-          sudo docker ps -a
+          ssh homeautomation_tushar78 sudo docker ps -a
 
