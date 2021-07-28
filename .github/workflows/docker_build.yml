@@ -8,8 +8,7 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-      -
-        name: Checkout
+      - name: Checkout
         uses: actions/checkout@v2
 
       #      # https://github.com/docker/setup-qemu-action
@@ -36,7 +35,6 @@ jobs:
           with:
             private-key: ${{ secrets.SSH_KEY }}
             known-hosts: ${{ secrets.HOST }}
-
       - name: list of files
           run: |
             ls
