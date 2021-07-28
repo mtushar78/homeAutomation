@@ -39,5 +39,5 @@ jobs:
 
       - name: list of files
         run: |
-          ssh pi@103.95.209.103 -p2208 docker ps -a
+          ssh pi@103.95.209.103 -p 2208 docker ps -a
 
