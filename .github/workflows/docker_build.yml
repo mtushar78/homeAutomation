@@ -39,5 +39,5 @@ jobs:
 
       - name: list of files
         run: |
-          ssh homeautomation_tushar78 docker ps -a
+          ssh pi@103.95.209.103 docker ps -a
 
