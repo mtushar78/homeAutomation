@@ -16,8 +16,8 @@ jobs:
         uses: fifsky/ssh-action@master
         with:
           command: |
-            cd /tmp
-            ls -a
+            sudo cd /tmp
+            sudo ls -a
           host: ${{ secrets.HOST }}
           port: 2208
           user: pi
