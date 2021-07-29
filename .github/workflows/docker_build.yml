@@ -19,7 +19,8 @@ jobs:
           username: pi
           password: raspberry
           port: 2208
-          script: whoami
+          script: |
+            sudo docker ps -a
 
 #      # https://github.com/docker/setup-qemu-action
 #      - name: Set up QEMU
