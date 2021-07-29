@@ -12,16 +12,14 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
 
-      - name: ls -a via ssh
-        uses: fifsky/ssh-action@master
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
         with:
-          command: |
-            sudo cd /tmp
-            sudo ls -a
-          host: ${{ secrets.HOST }}
+          host: 103.95.209.103
+          username: pi
+          password: raspberry
           port: 2208
-          user: pi
-          key: ${{ secrets.SSH_KEY}}
+          script: whoami
 
 #      # https://github.com/docker/setup-qemu-action
 #      - name: Set up QEMU
