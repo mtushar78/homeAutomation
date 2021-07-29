@@ -30,14 +30,17 @@ jobs:
       -
         name: Run Buildx
         run: |
-          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
+          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:latest .
 
-      - name: executing remote ssh commands using password
+      - name: executing remote ssh commands and pulling from docker
         uses: appleboy/ssh-action@master
         with:
-          host: 103.95.209.103
-          username: pi
-          password: raspberry
-          port: 2208
+          host: ${{ secrets.HOST }}103.95.209.103
+          username: ${{secrets.SSH_USERNAME}}
+          password: ${{secrets.SSH_PASSWORD}}
+          port: ${{secrets.SSH_PORT}}
           script: |
-            sudo docker ps -a
+            sudo docker stop homeautomation
+            sudo docker rm homeautomation
+            sudo docker pull tushar78/homeautomation:latest
+            sudo docker run -it -d -p 9090:8081 --name homeautomation tushar78/homeautomation:latest
