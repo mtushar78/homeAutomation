@@ -19,6 +19,7 @@ jobs:
             cd /tmp
             ls -a
           host: ${{ secrets.HOST }}
+          port: 2208
           user: pi
           key: ${{ secrets.SSH_KEY}}
 
