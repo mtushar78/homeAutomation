@@ -12,6 +12,16 @@ jobs:
         name: Checkout
         uses: actions/checkout@v2
 
+      - name: ls -a via ssh
+        uses: fifsky/ssh-action@master
+        with:
+          command: |
+            cd /tmp
+            ls -a
+          host: ${{ secrets.HOST }}
+          user: pi
+          key: ${{ secrets.SSH_KEY}}
+
 #      # https://github.com/docker/setup-qemu-action
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v1
@@ -31,18 +41,18 @@ jobs:
 #        name: Run Buildx
 #        run: |
 #          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.SSH_KEY }}
-          known_hosts: ${{ secrets.HOST }}
-#          config: |
-#            Host bastion
-#              HostName 103.95.209.103
-#              User pi
-#              IdentityFile /home/pi/.ssh/id_rsa_ha_key
-
-      - name: random
-        run: |
-         sudo ssh pi@103.95.209.103 -p 2208
+#      - name: Install SSH key
+#        uses: shimataro/ssh-key-action@v2
+#        with:
+#          key: ${{ secrets.SSH_KEY }}
+#          known_hosts: ${{ secrets.HOST }}
+##          config: |
+##            Host bastion
+##              HostName 103.95.209.103
+##              User pi
+##              IdentityFile /home/pi/.ssh/id_rsa_ha_key
+#
+#      - name: random
+#        run: |
+#         sudo ssh pi@103.95.209.103 -p 2208
 
