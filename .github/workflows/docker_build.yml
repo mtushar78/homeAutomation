@@ -8,44 +8,36 @@ jobs:
   buildx:
     runs-on: ubuntu-latest
     steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
+      -
+        name: Checkout
+        uses: actions/checkout@v2
+
+      # https://github.com/docker/setup-qemu-action
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      # https://github.com/docker/setup-buildx-action
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1
         with:
-          key: ${{ secrets.SSH_KEY }}
-          name: id_rsa # optional
-          known_hosts: ${{ secrets.HOST }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      -
+        name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}
+      -
+        name: Run Buildx
+        run: |
+          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
 
-
-      - name: list
-        run: ls
-      #      - name: Checkout
-      #        uses: actions/checkout@v2
-
-      #      # https://github.com/docker/setup-qemu-action
-      #      - name: Set up QEMU
-      #        uses: docker/setup-qemu-action@v1
-      #      # https://github.com/docker/setup-buildx-action
-      #      - name: Set up Docker Buildx
-      #        uses: docker/setup-buildx-action@v1
-      #      -
-      #        name: Login to DockerHub
-      #        uses: docker/login-action@v1
-      #        with:
-      #          username: ${{ secrets.DOCKER_USERNAME }}
-      #          password: ${{ secrets.DOCKER_PASSWORD }}
-      #      -
-      #        name: Available platforms
-      #        run: echo ${{ steps.buildx.outputs.platforms }}
-      #      -
-      #        name: Run Buildx
-      #        run: |
-      #          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:2 .
-#      - name: Install SSH key
-#          uses: shimataro/ssh-key-action@v2
-#          with:
-#            private-key: ${{ secrets.SSH_KEY }}
-#            known-hosts: ${{ secrets.HOST }}
-#      - name: list of files
-#          run: |
-#            ls
-
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: 103.95.209.103
+          username: pi
+          password: raspberry
+          port: 2208
+          script: |
+            sudo docker ps -a
