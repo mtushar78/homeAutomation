@@ -97,7 +97,7 @@ public class MainController {
        System.out.println(relay.toString());
         SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
-        TimeZone.setDefault(TimeZone.getTimeZone("GMT+6"));
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+6:00"));
         System.out.println("time: "+formatter.format(date));
         try{
             relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus(), formatter.format(date));

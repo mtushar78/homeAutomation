@@ -30,8 +30,8 @@ jobs:
       -
         name: Run Buildx
         run: |
-          docker buildx build --platform=linux/arm64,linux/amd64,linux/arm/v7 --push -t tushar78/homeautomation:latest .
-
+          docker buildx build --platform=linux/arm/v7 --push -t tushar78/homeautomation:latest .
+#  linux/arm64,linux/amd64,
       - name: executing remote ssh commands and pulling from docker
         uses: appleboy/ssh-action@master
         with:
