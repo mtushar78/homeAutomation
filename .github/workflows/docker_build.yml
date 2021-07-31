@@ -43,4 +43,4 @@ jobs:
             sudo docker stop homeautomation
             sudo docker rm homeautomation
             sudo docker pull tushar78/homeautomation:latest
-            sudo docker run -it -d --restart unless-stopped -p 8081:8081 --name homeautomation --network="automation_net" tushar78/homeautomation:latest
+            sudo docker run -it -d --restart unless-stopped -p 8081:8081 --name homeautomation --network="host" tushar78/homeautomation:latest
