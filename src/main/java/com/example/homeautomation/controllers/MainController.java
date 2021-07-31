@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 @RestController
 public class MainController {
@@ -96,9 +97,15 @@ public class MainController {
        System.out.println(relay.toString());
         SimpleDateFormat formatter= new SimpleDateFormat("dd-MM-yyyy HH:mm:ss z");
         Date date = new Date(System.currentTimeMillis());
+        TimeZone.setDefault(TimeZone.getTimeZone("GMT+6"));
         System.out.println("time: "+formatter.format(date));
-        relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus(), formatter.format(date));
-        return "success";
+        try{
+            relayRepo.setRelayOnOff(relay.getMac(),relay.getRelay_name(),relay.getStatus(), formatter.format(date));
+            return "success";
+        }catch (Exception exception){
+            return exception.toString();
+        }
+
     }
     @PostMapping("/test")
     public void restTest(@RequestBody JSONObject object){
