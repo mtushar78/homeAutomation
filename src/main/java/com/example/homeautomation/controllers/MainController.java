@@ -38,7 +38,7 @@ public class MainController {
 
     @GetMapping("/")
     public String hello(){
-        return "Hello All people !";
+        return "Hello  ghjyrtrtr All people !";
     }
     @GetMapping("/getUserInfo/{email}")
     public ResponseEntity<User> getUserInfo(@PathVariable String email){
