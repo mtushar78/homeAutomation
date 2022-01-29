@@ -42,4 +42,4 @@ jobs:
           script: |
             sudo docker rm -f homeautomation
             sudo docker pull tushar78/homeautomation:latest
-            sudo docker run -it -d --restart unless-stopped -p 8081:8081 --name homeautomation --network="host" tushar78/homeautomation:latest
+            sudo docker run --add-host=docker:192.168.0.107 -it -d --restart unless-stopped -p 8081:8081 --name homeautomation --network="host" tushar78/homeautomation:latest
